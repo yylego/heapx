@@ -1,25 +1,26 @@
-package heapx
+package heapx_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/yylego/heapx"
 )
 
-func popValue[V any](t *testing.T, h *Heap[V]) V {
+func popValue[V any](t *testing.T, h *heapx.Heap[V]) V {
 	node := h.Pop()
 	require.NotNil(t, node)
 	return node.Value
 }
 
-func peekValue[V any](t *testing.T, h *Heap[V]) V {
+func peekValue[V any](t *testing.T, h *heapx.Heap[V]) V {
 	node := h.Peek()
 	require.NotNil(t, node)
 	return node.Value
 }
 
 func TestHeap_PushPop(t *testing.T) {
-	h := New[int](func(a, b int) bool { return a < b })
+	h := heapx.New[int](func(a, b int) bool { return a < b })
 
 	h.Push(3)
 	h.Push(1)
@@ -35,7 +36,7 @@ func TestHeap_PushPop(t *testing.T) {
 }
 
 func TestHeap_Fix(t *testing.T) {
-	h := New[int](func(a, b int) bool { return a < b })
+	h := heapx.New[int](func(a, b int) bool { return a < b })
 
 	n1 := h.Push(10)
 	_ = h.Push(20)
@@ -56,7 +57,7 @@ func TestHeap_Fix(t *testing.T) {
 }
 
 func TestHeap_Remove(t *testing.T) {
-	h := New[int](func(a, b int) bool { return a < b })
+	h := heapx.New[int](func(a, b int) bool { return a < b })
 
 	n1 := h.Push(10)
 	h.Push(20)
@@ -68,7 +69,7 @@ func TestHeap_Remove(t *testing.T) {
 }
 
 func TestHeap_EmptyPeek(t *testing.T) {
-	h := New[int](func(a, b int) bool { return a < b })
+	h := heapx.New[int](func(a, b int) bool { return a < b })
 	require.Nil(t, h.Peek())
 	require.Nil(t, h.Pop())
 }
@@ -79,7 +80,7 @@ type task struct {
 }
 
 func TestHeap_Struct(t *testing.T) {
-	h := New[task](func(a, b task) bool { return a.deadline < b.deadline })
+	h := heapx.New[task](func(a, b task) bool { return a.deadline < b.deadline })
 
 	h.Push(task{name: "c", deadline: 300})
 	h.Push(task{name: "a", deadline: 100})
@@ -91,7 +92,7 @@ func TestHeap_Struct(t *testing.T) {
 }
 
 func TestHeap_FixWithStruct(t *testing.T) {
-	h := New[task](func(a, b task) bool { return a.deadline < b.deadline })
+	h := heapx.New[task](func(a, b task) bool { return a.deadline < b.deadline })
 
 	n1 := h.Push(task{name: "a", deadline: 100})
 	h.Push(task{name: "b", deadline: 200})
@@ -103,7 +104,7 @@ func TestHeap_FixWithStruct(t *testing.T) {
 }
 
 func TestNode_Index(t *testing.T) {
-	h := New[int](func(a, b int) bool { return a < b })
+	h := heapx.New[int](func(a, b int) bool { return a < b })
 
 	n := h.Push(10)
 	require.True(t, n.Index() >= 0)
